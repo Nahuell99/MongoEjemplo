@@ -1,0 +1,10 @@
+com\nahuel\mongodb\Empleado.class
+com\nahuel\mongodb\MongoDBExample.class
+com\nahuel\mongodb\Venta$FormaPago.class
+com\nahuel\mongodb\ObraSocial.class
+com\nahuel\mongodb\Producto$TipoProducto.class
+com\nahuel\mongodb\Producto.class
+com\nahuel\mongodb\Sucursal.class
+com\nahuel\mongodb\Cliente.class
+com\nahuel\mongodb\Venta.class
+com\nahuel\mongodb\App.class

@@ -1,0 +1,58 @@
+package com.nahuel.mongodb.serializador;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.nahuel.mongodb.Cliente;
+import com.nahuel.mongodb.Empleado;
+import com.nahuel.mongodb.ObraSocial;
+import com.nahuel.mongodb.Producto;
+import com.nahuel.mongodb.Sucursal;
+import com.nahuel.mongodb.Venta;
+import com.nahuel.mongodb.Producto.TipoProducto;
+import com.nahuel.mongodb.Venta.FormaPago;
+
+import java.util.*;
+
+import org.bson.Document;
+
+public class SerializadorVenta {
+    public static void main(String[] args) {
+        ObraSocial obraSocial = new ObraSocial("OSDE", "osde123");
+        Cliente cliente = new Cliente("c1", "Juan", "Pérez", "12345678", "Calle falsa 123", "Lanus", "Buenos Aires", obraSocial, "987654");
+        Sucursal sucursal = new Sucursal("s1", "Calle falsa", "123", "Microcentro", "Ciudad Autonoma de Buenos Aires");
+        Empleado empleado = new Empleado("e1", "Laura", "Gómez", "23456789", "20-23456789-3", "Calle falsa 123", "Lanus", "Buenos Aires", obraSocial, "123456", sucursal, true);
+
+        Producto producto1 = new Producto("p1", "MED001", "Ibuprofeno 600mg", TipoProducto.MEDICAMENTO, "Bayer", 100.0, 2);
+        Producto producto2 = new Producto("p2", "PERF001", "Shampoo Anticaspa", TipoProducto.PERFUMERIA, "Pantene", 300.0, 1);
+
+        List<Producto> productos = Arrays.asList(producto1, producto2);
+
+        Venta venta = new Venta("v1", "0001-000123", new Date(), 500.0, FormaPago.TARJETA, cliente, empleado, empleado, productos);
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(venta);
+        
+	     // Conexión a MongoDB
+	    String uri = "mongodb://localhost:27017";
+        try (MongoClient mongoClient = MongoClients.create(uri)) {
+            MongoDatabase database = mongoClient.getDatabase("mi_base_de_datos");
+            MongoCollection<Document> collection = database.getCollection("ventas");
+
+            // Conversión del JSON a Document de MongoDB
+            Document documentoVenta = Document.parse(json);
+
+            // Inserción
+            collection.insertOne(documentoVenta);
+
+            System.out.println("Venta insertada correctamente en MongoDB.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(json);
+    }
+}
+

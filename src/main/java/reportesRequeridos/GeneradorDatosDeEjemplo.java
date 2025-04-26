@@ -34,9 +34,9 @@ public class GeneradorDatosDeEjemplo {
             List<ObraSocial> obrasSociales = Arrays.asList(osde, swiss);
 
             // 2. Sucursales
-            Sucursal s1 = new Sucursal("s1", "Av. Siempre Viva", "123", "Springfield", "Illinois");
-            Sucursal s2 = new Sucursal("s2", "Calle Falsa", "456", "Shelbyville", "Illinois");
-            Sucursal s3 = new Sucursal("s3", "Avenida Principal", "789", "Capital", "Buenos Aires");
+            Sucursal s1 = new Sucursal("01", "Av. Siempre Viva", "123", "Springfield", "Illinois");
+            Sucursal s2 = new Sucursal("02", "Calle Falsa", "456", "Shelbyville", "Illinois");
+            Sucursal s3 = new Sucursal("03", "Avenida Principal", "789", "Capital", "Buenos Aires");
 
             List<Sucursal> sucursales = Arrays.asList(s1, s2, s3);
 
@@ -75,7 +75,7 @@ public class GeneradorDatosDeEjemplo {
                 int cantidadVentas = 28 + random.nextInt(5);
                 for (int i = 0; i < cantidadVentas; i++) {
                     String idVenta = "v" + ventaCounter++;
-                    String nroTicket = sucursal.getIdSucursal() + "-" + String.format("%06d", i + 1);
+                    String nroTicket = String.format("%04d", Integer.parseInt(sucursal.getIdSucursal())) + "-" + String.format("%08d", i + 1);
                     long ahora = System.currentTimeMillis();
                     long unAnio = 365L * 24 * 60 * 60 * 1000;
                     Date fecha = new Date(ahora - (Math.abs(random.nextLong()) % unAnio));

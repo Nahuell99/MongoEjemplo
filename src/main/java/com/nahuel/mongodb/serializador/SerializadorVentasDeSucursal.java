@@ -36,11 +36,11 @@ public class SerializadorVentasDeSucursal {
         Producto p1 = new Producto("p3", "MED002", "Paracetamol", TipoProducto.MEDICAMENTO, "Bagó", 80.0, 1);
         Producto p2 = new Producto("p4", "PERF002", "Crema hidratante", TipoProducto.PERFUMERIA, "Nivea", 250.0, 2);
 
-        Venta venta1 = new Venta("v2", "0002-000456", new Date(), 580.0, FormaPago.EFECTIVO, cliente1, vendedor1, vendedor1, Arrays.asList(p1, p2));
+        Venta venta1 = new Venta("v2", "0002-000456", new Date(), 580.0, FormaPago.EFECTIVO, cliente1, vendedor1, vendedor1, Arrays.asList(p1, p2), vendedor1.getSucursal());
 
         // Simulamos otra venta
         Producto p3 = new Producto("p5", "MED003", "Amoxicilina", TipoProducto.MEDICAMENTO, "Roemmers", 120.0, 1);
-        Venta venta2 = new Venta("v3", "0002-000457", new Date(), 120.0, FormaPago.DEBITO, cliente1, vendedor1, vendedor1, Arrays.asList(p3));
+        Venta venta2 = new Venta("v3", "0002-000457", new Date(), 120.0, FormaPago.DEBITO, cliente1, vendedor1, vendedor1, Arrays.asList(p3), vendedor1.getSucursal());
 
         List<Venta> ventas = Arrays.asList(venta1, venta2);
 

@@ -1,4 +1,5 @@
 package consultas;
+
 import com.mongodb.client.*;
 import com.mongodb.client.model.*;
 import org.bson.Document;
@@ -8,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class CuartaConsultaVentasPorTipoProducto {
+
     public static void main(String[] args) throws Exception {
         MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
         MongoDatabase database = mongoClient.getDatabase("farmacia");
@@ -35,6 +37,10 @@ public class CuartaConsultaVentasPorTipoProducto {
 
         AggregateIterable<Document> resultados = ventas.aggregate(pipeline);
 
+        // Map para acumular el total general por tipo de producto
+        Map<String, Double> totalVentasPorTipo = new HashMap<>();
+        Map<String, Integer> cantidadVendidaPorTipo = new HashMap<>();
+
         System.out.println("Detalle y Totales de Ventas de Productos:");
         for (Document doc : resultados) {
             Document id = doc.get("_id", Document.class);
@@ -45,6 +51,19 @@ public class CuartaConsultaVentasPorTipoProducto {
 
             System.out.printf("- Sucursal: %s | Tipo: %s | Total Vendido: $%.2f | Cantidad: %d\n",
                     sucursal, tipoProducto, totalVentas, cantidadVendida);
+
+            // Acumular para el resumen final por tipo
+            totalVentasPorTipo.merge(tipoProducto, totalVentas, Double::sum);
+            cantidadVendidaPorTipo.merge(tipoProducto, cantidadVendida, Integer::sum);
+        }
+
+        // Mostramos los nuevos totalizadores generales por tipo de producto
+        System.out.println("\n--- TOTAL CADENA COMPLETA POR TIPO DE PRODUCTO ---");
+        for (String tipo : totalVentasPorTipo.keySet()) {
+            double total = totalVentasPorTipo.get(tipo);
+            int cantidad = cantidadVendidaPorTipo.get(tipo);
+            System.out.printf("TOTAL SUCURSAL | Tipo: %s | Total Vendido: $%.2f | Cantidad: %d\n",
+                    tipo, total, cantidad);
         }
 
         mongoClient.close();

@@ -25,7 +25,7 @@ public class SegundaConsultaVentasPorObraSocial {
             double total = venta.getDouble("total");
 
             Document vendedor = (Document) venta.get("vendedor");
-            Document sucursal = (Document) vendedor.get("sucursal");
+            Document sucursal = (Document) venta.get("sucursalVenta");
             String idSucursal = sucursal.getString("idSucursal");
 
             Document cliente = (Document) venta.get("cliente");

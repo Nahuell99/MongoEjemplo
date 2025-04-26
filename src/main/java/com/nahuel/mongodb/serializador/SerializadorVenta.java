@@ -30,7 +30,7 @@ public class SerializadorVenta {
 
         List<Producto> productos = Arrays.asList(producto1, producto2);
 
-        Venta venta = new Venta("v1", "0001-000123", new Date(), 500.0, FormaPago.TARJETA, cliente, empleado, empleado, productos);
+        Venta venta = new Venta("v1", "0001-000123", new Date(), 500.0, FormaPago.TARJETA, cliente, empleado, empleado, productos, empleado.getSucursal());
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(venta);

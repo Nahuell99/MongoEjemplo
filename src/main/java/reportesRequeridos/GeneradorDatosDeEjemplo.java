@@ -83,6 +83,7 @@ public class GeneradorDatosDeEjemplo {
                     Venta.FormaPago formaPago = Venta.FormaPago.values()[random.nextInt(Venta.FormaPago.values().length)];
                     Cliente cliente = clientes.get(random.nextInt(clientes.size()));
                     Empleado vendedor = empleadosSucursal.get(random.nextInt(empleadosSucursal.size()));
+                    Sucursal sucursalVenta = vendedor.getSucursal(); // Sucursal asignada al momento de la venta
 
                     List<Producto> productosVenta = new ArrayList<>();
                     int cantidadProductos = 1 + random.nextInt(3);
@@ -93,7 +94,7 @@ public class GeneradorDatosDeEjemplo {
                     }
 
                     double total = productosVenta.stream().mapToDouble(p -> p.getPrecioUnitario() * p.getCantidad()).sum();
-                    ventas.add(new Venta(idVenta, nroTicket, fecha, total, formaPago, cliente, vendedor, vendedor, productosVenta));
+                    ventas.add(new Venta(idVenta, nroTicket, fecha, total, formaPago, cliente, vendedor, vendedor, productosVenta,sucursalVenta));
                 }
             }
 
@@ -135,7 +136,9 @@ public class GeneradorDatosDeEjemplo {
                 .append("cobrador", Document.parse(new Gson().toJson(v.getEmpleadoVenta())))
                 .append("productos", v.getProductosVendidos().stream()
                         .map(p -> Document.parse(new Gson().toJson(p)))
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList()))
+                .append("sucursalVenta", Document.parse(new Gson().toJson(v.getSucursalVenta())));
+	            
 
             docs.add(doc);
         }

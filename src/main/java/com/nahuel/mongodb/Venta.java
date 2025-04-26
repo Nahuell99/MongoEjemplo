@@ -14,9 +14,12 @@ public class Venta {
     private Empleado empleadoVenta;
     private Empleado empleadoAtencion;
     private List<Producto> productosVendidos;
+    private Sucursal sucursalVenta;
+
     
-    public Venta(String idVenta, String nroTicket, Date fecha, double total, FormaPago formaPago, Cliente cliente,
-			Empleado empleadoVenta, Empleado empleadoAtencion, List<Producto> productosVendidos) {
+	public Venta(String idVenta, String nroTicket, Date fecha, double total, FormaPago formaPago, Cliente cliente,
+			Empleado empleadoVenta, Empleado empleadoAtencion, List<Producto> productosVendidos,
+			Sucursal sucursalVenta) {
 		super();
 		this.idVenta = idVenta;
 		this.nroTicket = nroTicket;
@@ -27,9 +30,17 @@ public class Venta {
 		this.empleadoVenta = empleadoVenta;
 		this.empleadoAtencion = empleadoAtencion;
 		this.productosVendidos = productosVendidos;
+		this.sucursalVenta = sucursalVenta;
+	}
+	
+	public Sucursal getSucursalVenta() {
+		return sucursalVenta;
 	}
 
-    
+	public void setSucursalVenta(Sucursal sucursalVenta) {
+		this.sucursalVenta = sucursalVenta;
+	}
+
 	public String getIdVenta() {
 		return idVenta;
 	}

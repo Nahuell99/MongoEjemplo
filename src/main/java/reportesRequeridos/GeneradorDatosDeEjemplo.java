@@ -10,6 +10,7 @@ import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
 import com.nahuel.mongodb.*;
+import com.nahuel.mongodb.Venta.FormaPago;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -85,18 +86,23 @@ public class GeneradorDatosDeEjemplo {
                     Empleado vendedor = empleadosSucursal.get(random.nextInt(empleadosSucursal.size()));
                     Sucursal sucursalVenta = vendedor.getSucursal(); // Sucursal asignada al momento de la venta
 
-                    List<Producto> productosVenta = new ArrayList<>();
+                    List<DetalleVenta> detalleVenta = new ArrayList<>();
                     int cantidadProductos = 1 + random.nextInt(3);
                     for (int j = 0; j < cantidadProductos; j++) {
                         Producto prod = productosCatalogo.get(random.nextInt(productosCatalogo.size()));
-                        productosVenta.add(new Producto(prod.getIdProducto(), prod.getCodigo(), prod.getDescripcion(),
-                                prod.getTipo(), prod.getLaboratorio(), prod.getPrecioUnitario(), 1 + random.nextInt(3)));
+                        int cantidad = 1 + random.nextInt(3);
+                        detalleVenta.add(new DetalleVenta(
+                            prod,
+                            cantidad,
+                            Math.round((10 + (990 * random.nextDouble())) * 100.0) / 100.0 //Precio aleatorio del producto
+                        ));
                     }
 
-                    double total = productosVenta.stream().mapToDouble(p -> p.getPrecioUnitario() * p.getCantidad()).sum();
-                    ventas.add(new Venta(idVenta, nroTicket, fecha, total, formaPago, cliente, vendedor, vendedor, productosVenta,sucursalVenta));
+                    double total = detalleVenta.stream().mapToDouble(DetalleVenta::getSubtotal).sum();
+                    ventas.add(new Venta(idVenta, nroTicket, fecha, formaPago, cliente, vendedor, vendedor, detalleVenta, sucursalVenta));
                 }
             }
+            
 
             // Insertar cada colección en MongoDB (como JSON plano)
             insertarColeccion(db, "obrasSociales", obrasSociales, gson);

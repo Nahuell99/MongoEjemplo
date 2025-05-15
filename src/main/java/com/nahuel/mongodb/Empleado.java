@@ -95,6 +95,22 @@ public class Empleado {
 		this.sucursal = sucursal;
 	}
 	
+	public String getIdEmpleado() {
+		return idEmpleado;
+	}
+
+	public void setIdEmpleado(String idEmpleado) {
+		this.idEmpleado = idEmpleado;
+	}
+
+	public Boolean getEncargado() {
+		return encargado;
+	}
+
+	public void setEncargado(Boolean encargado) {
+		this.encargado = encargado;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(apellido, cuil, dni, idEmpleado, nombre, nroAfiliado, obraSocial, sucursal);

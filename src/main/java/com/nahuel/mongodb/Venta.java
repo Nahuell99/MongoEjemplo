@@ -13,26 +13,27 @@ public class Venta {
     private Cliente cliente;
     private Empleado empleadoVenta;
     private Empleado empleadoAtencion;
-    private List<Producto> productosVendidos;
+    private List<DetalleVenta> productosVendidos;
     private Sucursal sucursalVenta;
 
     
-	public Venta(String idVenta, String nroTicket, Date fecha, double total, FormaPago formaPago, Cliente cliente,
-			Empleado empleadoVenta, Empleado empleadoAtencion, List<Producto> productosVendidos,
+	public Venta(String idVenta, String nroTicket, Date fecha, FormaPago formaPago, Cliente cliente,
+			Empleado empleadoVenta, Empleado empleadoAtencion, List<DetalleVenta> productosVendidos,
 			Sucursal sucursalVenta) {
 		super();
 		this.idVenta = idVenta;
 		this.nroTicket = nroTicket;
 		this.fecha = fecha;
-		this.total = total;
 		this.formaPago = formaPago;
 		this.cliente = cliente;
 		this.empleadoVenta = empleadoVenta;
 		this.empleadoAtencion = empleadoAtencion;
 		this.productosVendidos = productosVendidos;
 		this.sucursalVenta = sucursalVenta;
+		recalcularTotal(); // 🔁 Calcula total al crear
 	}
 	
+
 	public Sucursal getSucursalVenta() {
 		return sucursalVenta;
 	}
@@ -73,10 +74,6 @@ public class Venta {
 		return total;
 	}
 
-	public void setTotal(double total) {
-		this.total = total;
-	}
-
 	public FormaPago getFormaPago() {
 		return formaPago;
 	}
@@ -109,17 +106,37 @@ public class Venta {
 		this.empleadoAtencion = empleadoAtencion;
 	}
 
-	public List<Producto> getProductosVendidos() {
+	public List<DetalleVenta> getProductosVendidos() {
 		return productosVendidos;
 	}
 
-	public void setProductosVendidos(List<Producto> productosVendidos) {
-		this.productosVendidos = productosVendidos;
-	}
+	public void setProductosVendidos(List<DetalleVenta> productosVendidos) {
+        this.productosVendidos = productosVendidos;
+        recalcularTotal(); // 🔁 Calcula al asignar productos
+    }
 
+	// 🔁 Este método recalcula el total sumando los subtotales
+    public void recalcularTotal() {
+        if (productosVendidos == null) {
+            total = 0;
+        } else {
+            total = productosVendidos.stream()
+                    .mapToDouble(DetalleVenta::getSubtotal)
+                    .sum();
+        }
+    }
+    
+    // ➕ Método extra para actualizar un ítem y recalcular el total si hace falta
+    public void actualizarItem(int index, DetalleVenta nuevoDetalle) {
+        productosVendidos.set(index, nuevoDetalle);
+        recalcularTotal();
+    }
+	
+	
 	@Override
 	public int hashCode() {
-		return Objects.hash(cliente, empleadoVenta, fecha, formaPago, idVenta, nroTicket, productosVendidos, total);
+		return Objects.hash(cliente, empleadoAtencion, empleadoVenta, fecha, formaPago, idVenta, nroTicket,
+				productosVendidos, sucursalVenta, total);
 	}
 
 	@Override
@@ -131,10 +148,12 @@ public class Venta {
 		if (getClass() != obj.getClass())
 			return false;
 		Venta other = (Venta) obj;
-		return Objects.equals(cliente, other.cliente) && Objects.equals(empleadoVenta, other.empleadoVenta)
-				&& Objects.equals(fecha, other.fecha) && formaPago == other.formaPago
-				&& Objects.equals(idVenta, other.idVenta) && Objects.equals(nroTicket, other.nroTicket)
+		return Objects.equals(cliente, other.cliente) && Objects.equals(empleadoAtencion, other.empleadoAtencion)
+				&& Objects.equals(empleadoVenta, other.empleadoVenta) && Objects.equals(fecha, other.fecha)
+				&& formaPago == other.formaPago && Objects.equals(idVenta, other.idVenta)
+				&& Objects.equals(nroTicket, other.nroTicket)
 				&& Objects.equals(productosVendidos, other.productosVendidos)
+				&& Objects.equals(sucursalVenta, other.sucursalVenta)
 				&& Double.doubleToLongBits(total) == Double.doubleToLongBits(other.total);
 	}
 
@@ -142,7 +161,10 @@ public class Venta {
 	public String toString() {
 		return "Venta [idVenta=" + idVenta + ", nroTicket=" + nroTicket + ", fecha=" + fecha + ", total=" + total
 				+ ", formaPago=" + formaPago + ", cliente=" + cliente + ", empleadoVenta=" + empleadoVenta
-				+ ", productosVendidos=" + productosVendidos + "]";
+				+ ", empleadoAtencion=" + empleadoAtencion + ", productosVendidos=" + productosVendidos
+				+ ", sucursalVenta=" + sucursalVenta + "]";
 	}
+
+	
     
 }

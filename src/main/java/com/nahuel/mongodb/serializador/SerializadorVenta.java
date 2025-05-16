@@ -6,6 +6,7 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.nahuel.mongodb.Cliente;
+import com.nahuel.mongodb.DetalleVenta;
 import com.nahuel.mongodb.Empleado;
 import com.nahuel.mongodb.ObraSocial;
 import com.nahuel.mongodb.Producto;
@@ -20,17 +21,19 @@ import org.bson.Document;
 
 public class SerializadorVenta {
     public static void main(String[] args) {
+    	Random random = new Random();
         ObraSocial obraSocial = new ObraSocial("OSDE", "osde123");
         Cliente cliente = new Cliente("c1", "Juan", "Pérez", "12345678", "Calle falsa 123", "Lanus", "Buenos Aires", obraSocial, "987654");
         Sucursal sucursal = new Sucursal("s1", "Calle falsa", "123", "Microcentro", "Ciudad Autonoma de Buenos Aires");
         Empleado empleado = new Empleado("e1", "Laura", "Gómez", "23456789", "20-23456789-3", "Calle falsa 123", "Lanus", "Buenos Aires", obraSocial, "123456", sucursal, true);
-
-        Producto producto1 = new Producto("p1", "MED001", "Ibuprofeno 600mg", TipoProducto.MEDICAMENTO, "Bayer", 100.0, 2);
-        Producto producto2 = new Producto("p2", "PERF001", "Shampoo Anticaspa", TipoProducto.PERFUMERIA, "Pantene", 300.0, 1);
-
-        List<Producto> productos = Arrays.asList(producto1, producto2);
-
-        Venta venta = new Venta("v1", "0001-000123", new Date(), 500.0, FormaPago.TARJETA, cliente, empleado, empleado, productos, empleado.getSucursal());
+        
+        List<DetalleVenta> detalleVenta = new ArrayList<>(Arrays.asList(
+        	    new DetalleVenta(new Producto("p1", "MED001", "Ibuprofeno 600mg", TipoProducto.MEDICAMENTO, "Bayer"), 1, Math.round((10 + (990 * random.nextDouble())) * 100.0) / 100.0),
+        	    new DetalleVenta(new Producto("p2", "PERF001", "Shampoo Anticaspa", TipoProducto.PERFUMERIA, "Pantene"), 3, Math.round((10 + (990 * random.nextDouble())) * 100.0) / 100.0)
+        	));
+        
+        
+        Venta venta = new Venta("v1", "0001-000123", new Date(), FormaPago.TARJETA, cliente, empleado, empleado, detalleVenta, empleado.getSucursal());
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(venta);

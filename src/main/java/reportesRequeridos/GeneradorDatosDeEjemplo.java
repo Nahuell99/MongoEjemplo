@@ -10,6 +10,7 @@ import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
 import com.nahuel.mongodb.*;
+import com.nahuel.mongodb.Producto.TipoProducto;
 import com.nahuel.mongodb.Venta.FormaPago;
 
 import java.util.*;
@@ -62,7 +63,7 @@ public class GeneradorDatosDeEjemplo {
             List<Producto> productosCatalogo = new ArrayList<>();
             for (int i = 1; i <= 10; i++) {
                 Producto.TipoProducto tipo = (i <= 7) ? Producto.TipoProducto.MEDICAMENTO : Producto.TipoProducto.PERFUMERIA;
-                productosCatalogo.add(new Producto("prod" + i, "COD" + i, "Producto" + i, tipo, "Lab" + i, 100.0 + (i * 10), 1));
+                productosCatalogo.add(new Producto("prod" + i, "COD" + i, "Producto" + i, tipo, "Lab" + i));
             }
 
             // 6. Ventas

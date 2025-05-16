@@ -9,14 +9,24 @@ public class Producto {
     private TipoProducto tipo; // Enum
     private String laboratorio;
     
-    public Producto(String idProducto, String codigo, String descripcion, TipoProducto tipo, String laboratorio,
-			double precioUnitario, int cantidad) {
+    public Producto(String idProducto, String codigo, String descripcion, TipoProducto tipo, String laboratorio) {
 		super();
 		this.idProducto = idProducto;
 		this.codigo = codigo;
 		this.descripcion = descripcion;
 		this.tipo = tipo;
 		this.laboratorio = laboratorio;
+	}
+	
+	public enum TipoProducto {
+        MEDICAMENTO, PERFUMERIA
+    }
+	public TipoProducto getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(TipoProducto tipo) {
+		this.tipo = tipo;
 	}
 
 	public String getIdProducto() {
@@ -26,10 +36,6 @@ public class Producto {
 	public void setIdProducto(String idProducto) {
 		this.idProducto = idProducto;
 	}
-	
-	public enum TipoProducto {
-        MEDICAMENTO, PERFUMERIA
-    }
 
 	public String getCodigo() {
 		return codigo;
@@ -45,14 +51,6 @@ public class Producto {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
-	}
-
-	public TipoProducto getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(TipoProducto tipo) {
-		this.tipo = tipo;
 	}
 
 	public String getLaboratorio() {
@@ -87,8 +85,6 @@ public class Producto {
 		return "Producto [idProducto=" + idProducto + ", codigo=" + codigo + ", descripcion=" + descripcion + ", tipo="
 				+ tipo + ", laboratorio=" + laboratorio + "]";
 	}
-
-	
     
 }
 
